@@ -19,16 +19,24 @@ class DoomStillsDataset(data.Dataset):
 
 if __name__ == '__main__':
     import youtube_dl
-    ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
-    with ydl:
-        result = ydl.extract_info(
-            'http://www.youtube.com/watch?v=BaW_jenozKc',
-            download=False # We just want to extract the info
-        )
-    if 'entries' in result:
-        # Can be a playlist or a list of videos
-        video = result['entries'][0]
-    else:
-        # Just a video
-        video = result
-    print(video)
+    items = [
+        "https://www.youtube.com/watch?v=4vkFdcbUtBU",
+        "https://www.youtube.com/watch?v=apo9Vb-5pWo&list=PLm8AwdYOntbLy7vbWt42N555iuIN27XW0",
+        "https://www.youtube.com/watch?v=8kMHIzXzKSY&list=PLm8AwdYOntbLCyUVwimgxDL0azWx5EKAE",
+        "https://www.youtube.com/watch?v=86r_gPLSnPM&list=PLm8AwdYOntbLLr6z1pM4HW6znhVIxKxrn",
+    ]
+    with youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'}) as ydl:
+        for item in items:
+            result = ydl.extract_info(
+                item,
+                download=True,
+            )
+            if 'entries' in result:
+                # It is a playlist
+                for video in result['entries']:
+                    print(video)
+            else:
+                # Just a single video
+                video = result
+                print(video)
+            #f'{video.id}.{video.ext}'

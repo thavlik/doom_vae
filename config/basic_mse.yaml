@@ -1,0 +1,28 @@
+# Basic VAE trained on the dataset
+entrypoint: basic_mse
+
+model_params:
+  name: 'BasicMSE'
+  latent_dim: 256
+  encoder:
+    hidden_dims: [256, 512, 1024, 2048]
+  decoder:
+    hidden_dims: [2048, 1024, 512, 256]
+
+exp_params:
+  dataset:
+    loader: doom_stills
+    endpoint: https://sfo2.digitaloceanspaces.com
+    bucket: doom_vae
+    cache: ./data/cache
+  learning_rate: 0.000001
+  batch_size: 256
+
+trainer_params:
+  gpus: 1
+  max_epochs: 10000000
+
+logging_params:
+  save_dir: "logs/"
+  name: "BasicMSE"
+  manual_seed: 1000

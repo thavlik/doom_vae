@@ -7,8 +7,7 @@ from torchvision.datasets import CelebA
 import pytorch_lightning as pl
 from models.base import BaseVAE
 from utils import data_loader
-from dataset.doom_stills import DoomStillsDataset
-from dataset.doom_multiframe import DoomMultiframeDataset
+from dataset import DoomMultiframeDataset, DoomStillsDataset
 
 
 def get_dataset(dataset_params):

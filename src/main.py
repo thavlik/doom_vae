@@ -83,6 +83,11 @@ parser.add_argument('--config',  '-c',
                     metavar='FILE',
                     help='path to the experiment config file',
                     default='../configs/basic_mse.yaml')
+parser.add_argument('--log-epoch',
+                    dest="log_epoch",
+                    metavar='LOG_EPOCH',
+                    help='number of epochs per validation pass',
+                    default=200)
 args = parser.parse_args()
 config = load_config(args.filename)
 cudnn.deterministic = True

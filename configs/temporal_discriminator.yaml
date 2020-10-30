@@ -3,6 +3,8 @@
 # frames. 
 entrypoint: temporal_discriminator
 
+manual_seed: 1498
+
 model_params:
   name: 'TemporalDiscriminator'
   
@@ -47,5 +49,5 @@ trainer_params:
 logging_params:
   save_dir: "logs/"
   name: "TemporalDiscriminator"
-  manual_seed: 1498
+
 

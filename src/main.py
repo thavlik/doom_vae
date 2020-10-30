@@ -45,8 +45,8 @@ experiments = {
 
 
 def experiment_main(config):
-    torch.manual_seed(config['logging_params']['manual_seed'])
-    np.random.seed(config['logging_params']['manual_seed'])
+    torch.manual_seed(config['manual_seed'])
+    np.random.seed(config['manual_seed'])
     entrypoint = config['entrypoint']
     if torch.cuda.is_available():
         device = torch.device('cuda')

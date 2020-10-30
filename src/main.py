@@ -5,10 +5,29 @@ from pytorch_lightning import Trainer
 import torch.backends.cudnn as cudnn
 import torch
 import numpy as np
+from models import BasicVAE
+from basic_experiment import BasicExperiment
+
+def basic_adversarial(config):
+    raise NotImplementedError
 
 
-def basic_vae(config):
-    ...
+def basic_mse(config):
+    model = BasicVAE(**config['model_params'])
+    return BasicExperiment(model,
+                           params=config['exp_params'])
+
+
+def basic_fid(config):
+    raise NotImplementedError
+
+
+def temporal_discriminator(config):
+    raise NotImplementedError
+
+
+def temporal_distance(config):
+    raise NotImplementedError
 
 
 def load_config(path):
@@ -17,7 +36,11 @@ def load_config(path):
 
 
 experiments = {
-    'basic_vae': basic_vae,
+    'basic_adversarial': basic_adversarial,
+    'basic_fid': basic_fid,
+    'basic_mse': basic_mse,
+    'temporal_discriminator': temporal_discriminator,
+    'temporal_distance': temporal_distance,
 }
 
 
@@ -29,7 +52,9 @@ def experiment_main(config):
         device = torch.device('cuda')
     else:
         device = torch.device('cpu')
-    experiment = experiments[entrypoint](config).to(device)
+    fn = experiments.get(entrypoint, None)
+    assert fn != None, f"unknown entrypoint '{entrypoint}'"
+    experiment = fn(config).to(device)
     tt_logger = TestTubeLogger(
         save_dir=config['logging_params']['save_dir'],
         name=config['logging_params']['name'],
@@ -57,7 +82,7 @@ parser.add_argument('--config',  '-c',
                     dest="filename",
                     metavar='FILE',
                     help='path to the experiment config file',
-                    default='../configs/basic_vae.yaml')
+                    default='../configs/basic_mse.yaml')
 args = parser.parse_args()
 config = load_config(args.filename)
 cudnn.deterministic = True

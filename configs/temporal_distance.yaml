@@ -4,8 +4,6 @@
 # path thtrough Z, hopefully capturing causality.
 entrypoint: temporal_distance
 
-manual_seed: 1498
-
 model_params:
   name: 'TemporalDistance'
   
@@ -42,4 +40,4 @@ logging_params:
   save_dir: "logs/"
   name: "TemporalDistance"
 
-
+manual_seed: 13880

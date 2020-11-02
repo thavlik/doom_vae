@@ -1,8 +1,6 @@
 # Basic VAE regularized by FID(orig, recon)/(distance in Z)
 entrypoint: basic_fid
 
-manual_seed: 1498
-
 model_params:
   name: 'BasicFID'
   latent_dim: 256
@@ -29,3 +27,6 @@ trainer_params:
 logging_params:
   save_dir: "logs/"
   name: "BasicFID"
+
+manual_seed: 1498
+

@@ -3,13 +3,7 @@
 # windowed or letterbox)
 entrypoint: dataset_purifier
 
-manual_seed: 19821
-
 # The base VAE experiment to use for unsupervised pretraining.
-# If this is unset or an empty string, the model will be trained
-# from scratch. Otherwise, this decoder trained in this base
-# experiment will provide "sandwich layers" for this experiment's
-# model.
 base_experiment: ../configs/basic_mse.yaml
 
 model_params:
@@ -24,8 +18,13 @@ model_params:
   # match the base experiment.
   latent_dim: 256
 
-  # These must match hidden_dims of the decoder in the
-  # base experiment. 
+  # In enabled, the model will source every other layer
+  # from the base experiment's decoder.
+  sandwich: true
+
+  # If `sandwich` is `true`, these values must match
+  # the hidden_dims of the base experiment's decoder.
+  # Otherwise, these values can be anything.
   hidden_dims: [2048, 1024, 512, 256]
 
 exp_params:
@@ -44,3 +43,4 @@ logging_params:
   save_dir: "logs/"
   name: "DatasetPurifier"
 
+manual_seed: 19821

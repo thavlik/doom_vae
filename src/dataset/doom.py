@@ -22,6 +22,7 @@ def load_links(path):
 def get_raw_frames(id,
                    start_frame: int,
                    num_frames: int):
+    # TODO: check if video 
     with youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'}) as ydl:
         video = ydl.extract_info(
             f'https://www.youtube.com/watch?v={id}',

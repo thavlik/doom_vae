@@ -38,9 +38,11 @@ if __name__ == '__main__':
     
     items = [
         "https://www.youtube.com/watch?v=4vkFdcbUtBU",
-        "https://www.youtube.com/watch?v=apo9Vb-5pWo&list=PLm8AwdYOntbLy7vbWt42N555iuIN27XW0",
-        "https://www.youtube.com/watch?v=8kMHIzXzKSY&list=PLm8AwdYOntbLCyUVwimgxDL0azWx5EKAE",
-        "https://www.youtube.com/watch?v=86r_gPLSnPM&list=PLm8AwdYOntbLLr6z1pM4HW6znhVIxKxrn",
+        "https://www.youtube.com/watch?v=apo9Vb-5pWo",
+        "https://www.youtube.com/watch?v=c9oL3nCsILg",
+        #"https://www.youtube.com/watch?v=apo9Vb-5pWo&list=PLm8AwdYOntbLy7vbWt42N555iuIN27XW0",
+        #"https://www.youtube.com/watch?v=8kMHIzXzKSY&list=PLm8AwdYOntbLCyUVwimgxDL0azWx5EKAE",
+        #"https://www.youtube.com/watch?v=86r_gPLSnPM&list=PLm8AwdYOntbLLr6z1pM4HW6znhVIxKxrn",
     ]
     with youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'}) as ydl:
         for item in items:

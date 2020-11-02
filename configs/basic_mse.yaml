@@ -13,10 +13,9 @@ model_params:
 
 exp_params:
   dataset:
-    loader: doom_stills
-    endpoint: https://sfo2.digitaloceanspaces.com
-    bucket: doom_vae
-    cache: ./data/cache
+    loader: doom
+    path: ../dataset/links.txt
+    cache_path: ../dataset/cache
   learning_rate: 0.000001
   batch_size: 256
 

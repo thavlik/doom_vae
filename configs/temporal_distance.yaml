@@ -23,11 +23,10 @@ model_params:
   
 exp_params:
   dataset:
-    loader: doom_multiframe
+    loader: doom
+    path: ../dataset/links.txt
+    cache_path: ../dataset/cache
     num_frames: 32
-    endpoint: https://sfo2.digitaloceanspaces.com
-    bucket: doom_vae
-    cache: ./data/cache
   
   # Learning rate for all trainable parameters
   learning_rate: 0.000001

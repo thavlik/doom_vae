@@ -8,6 +8,7 @@ import numpy as np
 from models import BasicVAE
 from basic_experiment import BasicExperiment
 
+
 def basic_adversarial(config):
     raise NotImplementedError
 
@@ -19,6 +20,10 @@ def basic_mse(config):
 
 
 def basic_fid(config):
+    raise NotImplementedError
+
+
+def dataset_purifier(config):
     raise NotImplementedError
 
 
@@ -39,6 +44,7 @@ experiments = {
     'basic_adversarial': basic_adversarial,
     'basic_fid': basic_fid,
     'basic_mse': basic_mse,
+    'dataset_purifier': dataset_purifier,
     'temporal_discriminator': temporal_discriminator,
     'temporal_distance': temporal_distance,
 }

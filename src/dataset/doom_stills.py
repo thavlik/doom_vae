@@ -21,7 +21,7 @@ class DoomStillsDataset(data.Dataset):
 if __name__ == '__main__':
     import youtube_dl
     import cv2
-    
+
     def process_video(video):
         cap = cv2.VideoCapture(f'{video["id"]}.{video["ext"]}')
         # Check if camera opened successfully

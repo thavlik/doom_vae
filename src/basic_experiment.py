@@ -7,15 +7,12 @@ from torchvision.datasets import CelebA
 import pytorch_lightning as pl
 from models.base import BaseVAE
 from utils import data_loader
-from dataset import DoomMultiframeDataset, DoomStillsDataset
+from dataset import DoomDataset
 
 
 def get_dataset(dataset_params):
-    if dataset_params['loader'] == 'doom_stills':
-        return DoomStillsDataset(dataset_params['path'])
-    elif dataset_params['loader'] == 'doom_multiframe':
-        return DoomMultiframeDataset(dataset_params['path'],
-                                     num_frames=dataset_params['num_frames'])
+    if dataset_params['loader'] == 'doom':
+        return DoomDataset(**dataset_params['options'])
     else:
         raise ValueError(f"unknown loader {dataset_params['loader']}")
 

@@ -102,9 +102,6 @@ class DoomDataset(data.Dataset):
 
         height (int): output resolution Y
 
-        fps (int): target frames per second. If the source video
-        FPS differs, the nearest frame is chosen.
-
         skip_frames (int): number of frames to skip between each
         sampled frame
     """
@@ -114,13 +111,13 @@ class DoomDataset(data.Dataset):
                  num_frames=1,
                  width=640,
                  height=480,
-                 fps=30,
                  skip_frames=0):
 
         super(DoomDataset, self).__init__()
         self.width = width
         self.height = height
         self.num_frames = num_frames
+        self.skip_frames = skip_frames
         self.cache_path = cache_path
         source_videos = [{
             'id': '4vkFdcbUtBU',
@@ -138,7 +135,7 @@ class DoomDataset(data.Dataset):
         items = []
         total_examples = 0
         for video in source_videos:
-            video['num_examples'] = floor(video['num_frames'] / num_frames)
+            video['num_examples'] = floor(video['num_frames'] / (num_frames + skip_frames))
             total_examples += video['num_examples']
         self.source_videos = source_videos
         self.items = items
@@ -152,7 +149,7 @@ class DoomDataset(data.Dataset):
                 cur = end
                 continue
             start_example = index - cur
-            start_frame = start_example * self.num_frames
+            start_frame = start_example * (self.num_frames + self.skip_frames)
             if start_frame >= video['num_frames']:
                 raise ValueError(f"Unable to seek frame {start_frame} in video"
                                  f" with only {video['num_frames']} frames")

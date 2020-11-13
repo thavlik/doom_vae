@@ -88,6 +88,28 @@ def get_frames(id: str,
     return torch.stack(frames)
 
 
+def get_all_frames(id: str,
+                   ext: str,
+                   width: int,
+                   height: int,
+                   cache_path: str):
+    path = ensure_video_downloaded(id, ext, cache_path)
+    cap = cv2.VideoCapture(path)
+    if not cap.isOpened():
+        raise ValueError(f"Error opening video stream or file")
+    frames = []
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if ret == True:
+            frames.append(frame)
+            continue
+        else:
+            break
+    cap.release()
+    frames = resize_frames(frames, width, height)
+    return frames
+
+
 class DoomDataset(data.Dataset):
     """
     Arguments:
@@ -135,7 +157,8 @@ class DoomDataset(data.Dataset):
         items = []
         total_examples = 0
         for video in source_videos:
-            video['num_examples'] = floor(video['num_frames'] / (num_frames + skip_frames))
+            video['num_examples'] = floor(
+                video['num_frames'] / (num_frames + skip_frames))
             total_examples += video['num_examples']
         self.source_videos = source_videos
         self.items = items

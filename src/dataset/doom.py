@@ -199,7 +199,7 @@ if __name__ == '__main__':
     ds = DoomDataset(cache_path='../dataset/cache',
                      width=width,
                      height=height,
-                     num_frames=9)
+                     num_frames=num_frames)
     ex = ds[0]
     assert ex.shape == (num_frames, 3, height, width)
 

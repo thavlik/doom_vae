@@ -2,7 +2,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 from .base import BaseVAE
-from .resnet import BasicBlock
+from .resnet import BasicBlock, TransposeBasicBlock
 from torch import nn, Tensor
 from abc import abstractmethod
 from typing import List, Callable, Union, Any, TypeVar, Tuple
@@ -11,9 +11,39 @@ class BasicVAE(BaseVAE):
 
     def __init__(self,
                  latent_dim: int,
-                 hidden_dims: List = None,
+                 hidden_dims: List[int],
+                 dropout: float = 0.2,
+                 in_channels: int = 3, # (1) grayscle, (2) RGB color
                  **kwargs) -> None:
         super(BasicVAE, self).__init__()
+
+        # Encoder
+        modules = []
+        in_features = in_channels
+        for h_dim in hidden_dims:
+            modules.append(BasicBlock(in_features, h_dim))
+            in_features = h_dim
+        self.encoder = nn.Sequential(
+            *modules,
+            nn.Flatten(),
+        )
+        self.mu = nn.Sequential(
+            nn.Linear(0, latent_dim),
+            nn.ReLU(),
+        )
+        self.var = nn.Sequential(
+            nn.Linear(0, latent_dim),
+            nn.ReLU(),
+        )
+        
+        # Decoder
+        hidden_dims.reverse()
+
+        in_features = latent_dim
+        self.decoder = nn.Sequential(
+            nn.Linear(latent_dim, hidden_dims[0]),
+            TransposeBasicBlock()
+        )
 
     def encode(self, input: Tensor) -> List[Tensor]:
         """
@@ -22,7 +52,6 @@ class BasicVAE(BaseVAE):
         :param input: (Tensor) Input tensor to encoder [N x C x H x W]
         :return: (Tensor) List of latent codes
         """
-        # assert input.shape == (144, 2, 256)
         raise NotImplementedError
 
     def decode(self, z: Tensor) -> Tensor:
@@ -74,7 +103,7 @@ class BasicVAE(BaseVAE):
                                                log_var - mu ** 2 - log_var.exp(), dim=1), dim=0)
 
         loss = recons_loss + kld_weight * kld_loss
-        return {'loss': loss, 'Reconstruction_Loss': recons_loss, 'KLD': -kld_loss}
+        return {'loss': loss, 'Reconstruction_Loss': recons_loss, 'KLD_Loss': -kld_loss}
 
     def sample(self,
                num_samples: int,

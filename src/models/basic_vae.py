@@ -7,42 +7,57 @@ from torch import nn, Tensor
 from abc import abstractmethod
 from typing import List, Callable, Union, Any, TypeVar, Tuple
 
+
 class BasicVAE(BaseVAE):
 
     def __init__(self,
                  latent_dim: int,
                  hidden_dims: List[int],
                  dropout: float = 0.2,
-                 in_channels: int = 3, # (1) grayscle, (2) RGB color
-                 **kwargs) -> None:
+                 width: int = 320,
+                 height: int = 200,
+                 channels: int = 3) -> None:
         super(BasicVAE, self).__init__()
+        self.width = width
+        self.height = height
+        self.channels = channels
 
         # Encoder
         modules = []
-        in_features = in_channels
+        in_features = channels
         for h_dim in hidden_dims:
             modules.append(BasicBlock(in_features, h_dim))
             in_features = h_dim
         self.encoder = nn.Sequential(
             *modules,
             nn.Flatten(),
+            nn.Dropout(p=dropout),
         )
         self.mu = nn.Sequential(
-            nn.Linear(0, latent_dim),
+            nn.Linear(hidden_dims[-1], latent_dim),
             nn.ReLU(),
         )
         self.var = nn.Sequential(
-            nn.Linear(0, latent_dim),
+            nn.Linear(hidden_dims[-1], latent_dim),
             nn.ReLU(),
         )
-        
+
         # Decoder
         hidden_dims.reverse()
-
-        in_features = latent_dim
+        modules = []
+        in_features = hidden_dims[0]
+        for h_dim in hidden_dims:
+            modules.append(TransposeBasicBlock(in_features, h_dim))
+            in_features = h_dim
         self.decoder = nn.Sequential(
             nn.Linear(latent_dim, hidden_dims[0]),
-            TransposeBasicBlock()
+            *modules,
+        )
+        self.decoder_final = nn.Sequential(
+            nn.Flatten(),
+            nn.Dropout(p=dropout),
+            nn.Linear(hidden_dims[-1], width * height * channels),
+            nn.Sigmoid(),
         )
 
     def encode(self, input: Tensor) -> List[Tensor]:
@@ -52,7 +67,10 @@ class BasicVAE(BaseVAE):
         :param input: (Tensor) Input tensor to encoder [N x C x H x W]
         :return: (Tensor) List of latent codes
         """
-        raise NotImplementedError
+        x = self.encoder(input)
+        mu = self.mu(x)
+        var = self.var(x)
+        return [mu, var]
 
     def decode(self, z: Tensor) -> Tensor:
         """
@@ -61,7 +79,10 @@ class BasicVAE(BaseVAE):
         :param z: (Tensor) [B x D]
         :return: (Tensor) [B x C x H x W]
         """
-        raise NotImplementedError
+        x = self.decoder(z)
+        x = self.decoder_final(x)
+        x = x.view(x.shape[0], self.channels, self.height, self.width)
+        return x
 
     def reparameterize(self, mu: Tensor, logvar: Tensor) -> Tensor:
         """
@@ -96,14 +117,16 @@ class BasicVAE(BaseVAE):
         log_var = args[3]
 
         # Account for the minibatch samples from the dataset
-        kld_weight = kwargs['M_N']
+        kld_weight = kwargs['kld_weight']
         recons_loss = F.mse_loss(recons, input)
 
         kld_loss = torch.mean(-0.5 * torch.sum(1 +
                                                log_var - mu ** 2 - log_var.exp(), dim=1), dim=0)
 
         loss = recons_loss + kld_weight * kld_loss
-        return {'loss': loss, 'Reconstruction_Loss': recons_loss, 'KLD_Loss': -kld_loss}
+        return {'loss': loss,
+                'Reconstruction_Loss': recons_loss,
+                'KLD_Loss': -kld_loss}
 
     def sample(self,
                num_samples: int,

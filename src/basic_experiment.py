@@ -36,11 +36,11 @@ class BasicExperiment(pl.LightningModule):
         self.curr_device = real_img.device
 
         results = self.forward(real_img, labels=labels)
+        kld_weight = self.params['kld_weight'] * self.params['batch_size']/self.num_train_imgs
         train_loss = self.model.loss_function(*results,
-                                              # self.params['batch_size']/self.num_train_imgs,
-                                              M_N=0.0,
                                               optimizer_idx=optimizer_idx,
-                                              batch_idx=batch_idx)
+                                              batch_idx=batch_idx,
+                                              kld_weight=kld_weight)
 
         self.logger.experiment.log({key: val.item()
                                     for key, val in train_loss.items()})
@@ -52,11 +52,11 @@ class BasicExperiment(pl.LightningModule):
         self.curr_device = real_img.device
 
         results = self.forward(real_img, labels=labels)
+        kld_weight = self.params['kld_weight'] * self.params['batch_size']/self.num_train_imgs
         val_loss = self.model.loss_function(*results,
-                                            # self.params['batch_size']/self.num_val_imgs,
-                                            M_N=0.0,
                                             optimizer_idx=optimizer_idx,
-                                            batch_idx=batch_idx)
+                                            batch_idx=batch_idx,
+                                            kld_weight=kld_weight)
 
         return val_loss
 

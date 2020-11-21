@@ -19,6 +19,14 @@
             "program": "${workspaceFolder}/src/main.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}/src"
+        },
+        {
+            "name": "Python: compile.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/compile.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/src"
         }
     ]
 }

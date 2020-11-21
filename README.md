@@ -22,6 +22,9 @@ Gameplay videos are sourced from Youtube. Special thanks to the following creato
 
 This project will seek permission from the video authors before distributing the videos directly, e.g. from an S3 bucket. Currently, [youtube_dl](https://pypi.org/project/youtube_dl/) is used to download the videos to a local cache.
 
+## Contributing
+Please open an issue or pull request if you would like to contribute.
+
 ## TODO
 - Progressive growing decoder a la [3]
 - Implement beta loss term from [4]

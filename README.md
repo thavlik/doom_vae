@@ -20,7 +20,7 @@ Gameplay videos are sourced from Youtube. Special thanks to the following creato
 - [decino](https://www.youtube.com/c/decino)
 - [Zero Master](https://www.youtube.com/channel/UCiVZWY9LmrJFOg3hWGjyBbw)
 
-This project will seek permission from the video authors before distributing the videos directly, e.g. from an S3 bucket.
+This project will seek permission from the video authors before distributing the videos directly, e.g. from an S3 bucket. Currently, [youtube_dl](https://pypi.org/project/youtube_dl/) is used to download the videos to a local cache.
 
 ## TODO
 - Progressive growing decoder a la [3]

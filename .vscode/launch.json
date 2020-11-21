@@ -21,10 +21,10 @@
             "cwd": "${workspaceFolder}/src"
         },
         {
-            "name": "Python: compile.py",
+            "name": "Python: compiler.py",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/src/compile.py",
+            "program": "${workspaceFolder}/src/compiler.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}/src"
         }

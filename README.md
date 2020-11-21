@@ -20,7 +20,7 @@ Gameplay videos are sourced from Youtube. Special thanks to the following creato
 - [decino](https://www.youtube.com/c/decino)
 - [Zero Master](https://www.youtube.com/channel/UCiVZWY9LmrJFOg3hWGjyBbw)
 
-This project will seek permission from the video authors before distributing the videos directly, e.g. from an S3 bucket. Currently, [youtube_dl](https://pypi.org/project/youtube_dl/) is used to download the videos to a local cache.
+This project will seek permission from the video authors before distributing the videos directly, e.g. from an S3 bucket. Currently, [youtube_dl](https://pypi.org/project/youtube_dl/) is used to download the videos to a local cache. Note: code such as this providing access to copyrighted content is [explicitly recognized as fair use by Github](https://github.blog/2020-11-16-standing-up-for-developers-youtube-dl-is-back/). If your content has made its way into the dataset and you would prefer it be omitted, please open an issue.
 
 ## Contributing
 Please open an issue or pull request if you would like to contribute.

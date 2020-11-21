@@ -2,6 +2,7 @@ import argparse
 import json
 import youtube_dl
 import os
+import sys
 
 parser = argparse.ArgumentParser(
     description='Youtube dataset compiler')
@@ -9,7 +10,7 @@ parser.add_argument('--input',  '-i',
                     dest="input",
                     metavar='INPUT',
                     help='path to text file containing youtube video or playlist links',
-                    default='../dataset/links.txt')
+                    default='../dataset/full.txt')
 parser.add_argument('--output',
                     dest="output",
                     metavar='OUTPUT',
@@ -19,7 +20,7 @@ parser.add_argument('--download',
                     dest="download",
                     metavar='DOWNLOAD',
                     help='download videos if true',
-                    default=False)
+                    default=True)
 parser.add_argument('--cache_dir',
                     dest="cache_dir",
                     metavar='CACHE_DIR',
@@ -28,7 +29,7 @@ parser.add_argument('--cache_dir',
 args = parser.parse_args()
 
 
-completed = {}
+completed = []
 videos = []
 
 completed_path = os.path.join(os.path.dirname(args.output), '.completed.txt')
@@ -54,7 +55,7 @@ def write_videos():
         f.write(json.dumps(videos))
 
 
-def process_video(video):
+def process_video(video, ydl, download):
     videos.append({
         k: video[k] for k in ['id',
                               'ext',
@@ -66,29 +67,41 @@ def process_video(video):
                               'height',
                               'fps']
     })
+    id = video['id']
+    path = os.path.join(args.cache_dir, id + '.mp4')
+    if download and not os.path.exists(path):
+        try:
+            ydl.extract_info(
+                f'https://youtube.com/watch?v={id}',
+                download=True,
+            )
+        except:
+            print(f'Failed to download {id}: {sys.exc_info()}')
 
 
 with open(args.input, "r") as f:
     lines = [line.strip() for line in f]
 
 with youtube_dl.YoutubeDL({
-    'outtmpl': '%(id)s.%(ext)s',
-    'cachedir': args.cache_dir,
+    'verbose': True,
+    'outtmpl': args.cache_dir + '/%(id)s.%(ext)s',
+    # 'cachedir': args.cache_dir,
 }) as ydl:
     for line in lines:
         if line in completed:
+            print(f'Skipping {line}')
             continue
         result = ydl.extract_info(
             line,
-            download=args.download,
+            download=False,
         )
         if 'entries' in result:
             # It is a playlist
             for video in result['entries']:
-                process_video(video)
+                process_video(video, ydl, args.download)
         else:
             # Just a single video
-            process_video(result)
+            process_video(result, ydl, args.download)
         write_videos()
-        completed[line] = True
+        completed.append(line)
         write_completed()

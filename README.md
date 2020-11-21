@@ -17,7 +17,7 @@ Latent representations and unsupervised pretraining boost data efficiency on mor
 ## TODO
 - Progressive growing decoder a la [3]
 - Implement beta loss term from [4]
-- Implement FID loss
+- Implement FID(orig, recons) loss
 - Dataset compiler
 - ~~Doom gameplay video links~~
 - ~~Implement entrypoints~~

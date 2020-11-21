@@ -4,18 +4,15 @@ entrypoint: basic_mse
 model_params:
   name: 'BasicMSE'
   latent_dim: 256
-  encoder:
-    hidden_dims: [256, 512, 1024, 2048]
-  decoder:
-    hidden_dims: [2048, 1024, 512, 256]
+  hidden_dims: [256, 512]
 
 exp_params:
   dataset:
     loader: doom
     path: ../dataset/links.txt
     cache_path: ../dataset/cache
-  learning_rate: 0.000001
-  batch_size: 256
+  learning_rate: 0.0002
+  batch_size: 128
 
 trainer_params:
   gpus: 1

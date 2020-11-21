@@ -14,6 +14,14 @@ Latent representations and unsupervised pretraining boost data efficiency on mor
 3. [Progressive Growing of GANs for Improved Quality, Stability, and Variation](https://arxiv.org/abs/1710.10196)
 4. [beta-VAE: Learning Basic Visual Concepts with a Constrained Variational Framework](https://openreview.net/forum?id=Sy2fzU9gl)
 
+## The Data
+Gameplay videos are sourced from Youtube. Special thanks to the following creators for their contributions to the community and this dataset - these individuals are truly the lifeblood of the Doom community:
+- [Timothy Brown](https://www.youtube.com/user/mArt1And00m3r11339)
+- [decino](https://www.youtube.com/c/decino)
+- [Zero Master](https://www.youtube.com/channel/UCiVZWY9LmrJFOg3hWGjyBbw)
+
+This project will seek permission from the video authors before distributing the videos directly, e.g. from an S3 bucket.
+
 ## TODO
 - Progressive growing decoder a la [3]
 - Implement beta loss term from [4]
